@@ -1,39 +1,44 @@
-function BasicCard (front, back) {
-	this.front = front;
-	this.back = back;
-}
+// required files
+var basicCards = require("./basic.js");
+var clozeCards = require("./cloze.js");
+var viewCards = require("./view.js");
 
-function ClozeCard (text, cloze) {
-	this.text = text;
-	this.cloze = cloze;
-}
-
-ClozeCard.prototype.deletedText = function () {
-
-}
-
-ClozeCard.prototype.partialText = function () {
-
-} 
-
-ClozeCard.prototype.fullText = function () {
-
-}
 
 // Inquirer NPM
 var inquirer = require('inquirer');
-var numCards;
 
-var getNumCards = function () {
+// View Cards or make cards
+var viewOrMake = function () {
 	inquirer.prompt([
 		{
-			name: "numCards",
-			message: "How many flashcards do you want to make?"
+			name: "options",
+			message: "Do you want to make cards or view cards? (m/v)"
 		}
-	]).then(function(numFlashcards) {
-		numCards = numFlashcards;
-		console.log (numCards);
-	});
+	]).then(function(response) {
+		if (response.options === "m") {
+			getCardType();
+		}
+		if (response.options === "v") {
+			viewCards.viewType();
+		}
+	})	
 }
-	
-getNumCards();
+
+// BasicCard or ClozeCard
+var getCardType = function () {
+	inquirer.prompt([
+		{
+			name: "cardType",
+			message: "DO you want to make a Basic Card or a Cloze Card? (b/c)"
+		}
+	]).then(function(answer) {
+		if (answer.cardType === "b") {
+			basicCards.makeBasicCard();
+		}
+		if (answer.cardType === "c") {
+			clozeCards.makeClozeCard();
+		}
+ 	});
+};
+
+viewOrMake();
